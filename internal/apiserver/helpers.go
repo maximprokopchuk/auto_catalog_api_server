@@ -12,6 +12,7 @@ type Response struct {
 func constructListResponse[T any](result []T) *Response {
 	response := &Response{}
 	if len(result) == 0 {
+		// it will replace null by [] for empty slice
 		response.Result = make([]string, 0)
 	} else {
 		response.Result = result

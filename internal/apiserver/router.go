@@ -12,4 +12,6 @@ func (s *APIServer) configureRouter() {
 	s.router.Handle("/cities/{id}/", s.handleDeleteCity()).Methods("DELETE")
 
 	s.router.Handle("/car_models/", s.handleListCarModels()).Methods("GET")
+	s.router.Handle("/car_models/", s.handleCreateCarModel()).Methods("POST")
+	s.router.Handle("/car_models/{id}", s.handleDeleteCarModel()).Methods("DELETE")
 }

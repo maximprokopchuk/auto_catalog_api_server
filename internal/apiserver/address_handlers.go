@@ -43,11 +43,12 @@ func (s *APIServer) handleGetCountry() http.HandlerFunc {
 }
 
 func (s *APIServer) handleListCountries() http.HandlerFunc {
+	ctx := context.Background()
 	return func(w http.ResponseWriter, r *http.Request) {
 		params := &api.ListAddressesByParentIdAndTypeRequest{
 			Type: "country",
 		}
-		countries, err := s.GrpcClient.AddressClient.ListAddressesByParentAndType(context.Background(), params)
+		countries, err := s.GrpcClient.AddressClient.ListAddressesByParentAndType(ctx, params)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			return
@@ -62,6 +63,7 @@ type CreateCountryRequestBody struct {
 }
 
 func (s *APIServer) handleCreateCountry() http.HandlerFunc {
+	ctx := context.Background()
 	var body CreateCountryRequestBody
 	return func(w http.ResponseWriter, r *http.Request) {
 		err := json.NewDecoder(r.Body).Decode(&body)
@@ -77,7 +79,7 @@ func (s *APIServer) handleCreateCountry() http.HandlerFunc {
 			Type: "country",
 			Name: body.Name,
 		}
-		country, err := s.GrpcClient.AddressClient.CreateAddress(context.Background(), params)
+		country, err := s.GrpcClient.AddressClient.CreateAddress(ctx, params)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			return
@@ -87,6 +89,7 @@ func (s *APIServer) handleCreateCountry() http.HandlerFunc {
 }
 
 func (s *APIServer) handlerDeleteCountry() http.HandlerFunc {
+	ctx := context.Background()
 	return func(w http.ResponseWriter, r *http.Request) {
 		id, err := strconv.Atoi(mux.Vars(r)["id"])
 		if err != nil {
@@ -97,7 +100,7 @@ func (s *APIServer) handlerDeleteCountry() http.HandlerFunc {
 			Id:   int32(id),
 			Type: "country",
 		}
-		_, err = s.GrpcClient.AddressClient.DeleteAddress(context.Background(), params)
+		_, err = s.GrpcClient.AddressClient.DeleteAddress(ctx, params)
 		if err != nil {
 			if e, ok := status.FromError(err); ok && e.Code() == codes.NotFound {
 				w.WriteHeader(http.StatusNotFound)
@@ -142,6 +145,7 @@ func (s *APIServer) handleGetCity() http.HandlerFunc {
 }
 
 func (s *APIServer) handleListCities() http.HandlerFunc {
+	ctx := context.Background()
 	return func(w http.ResponseWriter, r *http.Request) {
 		country_id, err := strconv.Atoi(r.URL.Query().Get("country_id"))
 		if err != nil {
@@ -152,7 +156,7 @@ func (s *APIServer) handleListCities() http.HandlerFunc {
 			Type:     "city",
 			ParentId: int32(country_id),
 		}
-		countries, err := s.GrpcClient.AddressClient.ListAddressesByParentAndType(context.Background(), params)
+		countries, err := s.GrpcClient.AddressClient.ListAddressesByParentAndType(ctx, params)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			return
@@ -168,6 +172,7 @@ type CreateCityRequestBody struct {
 }
 
 func (s *APIServer) handleCreateCity() http.HandlerFunc {
+	ctx := context.Background()
 	var body CreateCityRequestBody
 	return func(w http.ResponseWriter, r *http.Request) {
 		err := json.NewDecoder(r.Body).Decode(&body)
@@ -188,7 +193,7 @@ func (s *APIServer) handleCreateCity() http.HandlerFunc {
 			Name:     body.Name,
 			ParentId: body.CountryId,
 		}
-		city, err := s.GrpcClient.AddressClient.CreateAddress(context.Background(), params)
+		city, err := s.GrpcClient.AddressClient.CreateAddress(ctx, params)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			return
@@ -198,8 +203,9 @@ func (s *APIServer) handleCreateCity() http.HandlerFunc {
 }
 
 func (s *APIServer) handleDeleteCity() http.HandlerFunc {
+	ctx := context.Background()
 	return func(w http.ResponseWriter, r *http.Request) {
-		id, err := strconv.Atoi(mux.Vars(r)["country_id"])
+		id, err := strconv.Atoi(mux.Vars(r)["id"])
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -208,7 +214,7 @@ func (s *APIServer) handleDeleteCity() http.HandlerFunc {
 			Id:   int32(id),
 			Type: "city",
 		}
-		_, err = s.GrpcClient.AddressClient.DeleteAddress(context.Background(), params)
+		_, err = s.GrpcClient.AddressClient.DeleteAddress(ctx, params)
 		if err != nil {
 			if e, ok := status.FromError(err); ok && e.Code() == codes.NotFound {
 				w.WriteHeader(http.StatusNotFound)
