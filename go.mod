@@ -5,7 +5,7 @@ go 1.22.1
 require (
 	github.com/BurntSushi/toml v1.3.2
 	github.com/gorilla/mux v1.8.1
-	github.com/maximprokopchuk/address_service v0.3.0
+	github.com/maximprokopchuk/address_service v0.4.0
 	github.com/maximprokopchuk/auto_reference_catalog_service v0.4.0
 	github.com/maximprokopchuk/storehouse_service v0.2.0
 	golang.org/x/net v0.20.0 // indirect

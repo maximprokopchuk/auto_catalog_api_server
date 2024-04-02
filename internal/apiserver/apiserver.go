@@ -1,57 +1,27 @@
 package apiserver
 
 import (
-	"encoding/json"
-	"io"
-	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/maximprokopchuk/auto_catalog_api_server/internal/grpcclient"
 )
 
 type APIServer struct {
-	config *Config
-	router *mux.Router
+	config     *Config
+	router     *mux.Router
+	GrpcClient *grpcclient.GRPCClient
 }
 
-func New(config *Config) *APIServer {
+func New(config *Config, grpc_client *grpcclient.GRPCClient) *APIServer {
 	return &APIServer{
-		config: config,
-		router: mux.NewRouter(),
+		config:     config,
+		router:     mux.NewRouter(),
+		GrpcClient: grpc_client,
 	}
 }
 
 func (s *APIServer) Start() error {
 	s.configureRouter()
 	return http.ListenAndServe(s.config.BindAddr, s.router)
-}
-
-func (s *APIServer) configureRouter() {
-	s.router.Handle("/hello", s.handleHello())
-}
-
-type Address struct {
-	Id       int32
-	Name     string
-	Type     string
-	ParentId int32
-}
-
-func (s *APIServer) handleHello() http.HandlerFunc {
-	address := &Address{
-		Id:       1,
-		Name:     "Moscow",
-		Type:     "City",
-		ParentId: 1,
-	}
-	return func(w http.ResponseWriter, r *http.Request) {
-		res, err := json.Marshal(address)
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		if _, err := io.WriteString(w, string(res)); err != nil {
-			log.Fatal(err)
-		}
-	}
 }

@@ -2,12 +2,12 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"log"
 
 	"github.com/BurntSushi/toml"
 	"github.com/maximprokopchuk/auto_catalog_api_server/internal/apiserver"
 	"github.com/maximprokopchuk/auto_catalog_api_server/internal/config"
+	"github.com/maximprokopchuk/auto_catalog_api_server/internal/grpcclient"
 )
 
 var configPath string
@@ -24,9 +24,12 @@ func run() error {
 		return err
 	}
 
-	fmt.Println(cfg.ApiServer.BindAddr)
+	grpc_client := grpcclient.New(cfg.GrpcClient)
+	grpc_client.Init()
 
-	s := apiserver.New(cfg.ApiServer)
+	s := apiserver.New(cfg.ApiServer, grpc_client)
+
+	log.Println("LISTEN " + cfg.ApiServer.BindAddr)
 
 	if err := s.Start(); err != nil {
 		return nil

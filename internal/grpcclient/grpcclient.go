@@ -10,9 +10,9 @@ import (
 
 type GRPCClient struct {
 	config            *Config
-	AddressClient     *address_api.AddressServiceClient
-	StoreHouseClient  *storehouse_api.StorehouseServiceClient
-	AutoCatalogClient *auto_catalog_api.AutoCatalogServiceClient
+	AddressClient     address_api.AddressServiceClient
+	StoreHouseClient  storehouse_api.StorehouseServiceClient
+	AutoCatalogClient auto_catalog_api.AutoCatalogServiceClient
 }
 
 func New(config *Config) *GRPCClient {
@@ -40,32 +40,32 @@ func (client *GRPCClient) Init() error {
 	return nil
 }
 
-func (client *GRPCClient) initAddressClient() (*address_api.AddressServiceClient, error) {
+func (client *GRPCClient) initAddressClient() (address_api.AddressServiceClient, error) {
 	conn, err := grpc.Dial(client.config.AddressServiceUrl, grpc.WithTransportCredentials(insecure.NewCredentials()))
 
 	if err != nil {
 		return nil, err
 	}
 	address_client := address_api.NewAddressServiceClient(conn)
-	return &address_client, nil
+	return address_client, nil
 }
 
-func (client *GRPCClient) initStorehouseClient() (*storehouse_api.StorehouseServiceClient, error) {
+func (client *GRPCClient) initStorehouseClient() (storehouse_api.StorehouseServiceClient, error) {
 	conn, err := grpc.Dial(client.config.StorehouseServiceUrl, grpc.WithTransportCredentials(insecure.NewCredentials()))
 
 	if err != nil {
 		return nil, err
 	}
 	storehouse_client := storehouse_api.NewStorehouseServiceClient(conn)
-	return &storehouse_client, nil
+	return storehouse_client, nil
 }
 
-func (client *GRPCClient) initAutoCatalogServiceClient() (*auto_catalog_api.AutoCatalogServiceClient, error) {
+func (client *GRPCClient) initAutoCatalogServiceClient() (auto_catalog_api.AutoCatalogServiceClient, error) {
 	conn, err := grpc.Dial(client.config.AutoReferenceCatalogServiceUrl, grpc.WithTransportCredentials(insecure.NewCredentials()))
 
 	if err != nil {
 		return nil, err
 	}
 	auto_catalog_client := auto_catalog_api.NewAutoCatalogServiceClient(conn)
-	return &auto_catalog_client, nil
+	return auto_catalog_client, nil
 }
