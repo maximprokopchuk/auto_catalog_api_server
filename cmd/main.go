@@ -25,7 +25,11 @@ func run() error {
 	}
 
 	grpc_client := grpcclient.New(cfg.GrpcClient)
-	grpc_client.Init()
+	err = grpc_client.Init()
+
+	if err != nil {
+		return err
+	}
 
 	s := apiserver.New(cfg.ApiServer, grpc_client)
 
