@@ -7,7 +7,8 @@ import (
 	"strconv"
 
 	"github.com/gorilla/mux"
-	"github.com/maximprokopchuk/address_service/pkg/api"
+	address_service_api "github.com/maximprokopchuk/address_service/pkg/api"
+	storehouse_service_api "github.com/maximprokopchuk/storehouse_service/pkg/api"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -20,7 +21,7 @@ func (s *APIServer) handleGetCountry() http.HandlerFunc {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		params := &api.GetAddressByIdRequest{
+		params := &address_service_api.GetAddressByIdRequest{
 			Id: int32(id),
 		}
 		city, err := s.GrpcClient.AddressClient.GetAddressById(ctx, params)
@@ -45,7 +46,7 @@ func (s *APIServer) handleGetCountry() http.HandlerFunc {
 func (s *APIServer) handleListCountries() http.HandlerFunc {
 	ctx := context.Background()
 	return func(w http.ResponseWriter, r *http.Request) {
-		params := &api.ListAddressesByParentIdAndTypeRequest{
+		params := &address_service_api.ListAddressesByParentIdAndTypeRequest{
 			Type: "country",
 		}
 		countries, err := s.GrpcClient.AddressClient.ListAddressesByParentAndType(ctx, params)
@@ -75,7 +76,7 @@ func (s *APIServer) handleCreateCountry() http.HandlerFunc {
 			http.Error(w, "Missing 'name' param", http.StatusBadRequest)
 			return
 		}
-		params := &api.CreateAddressRequest{
+		params := &address_service_api.CreateAddressRequest{
 			Type: "country",
 			Name: body.Name,
 		}
@@ -96,11 +97,33 @@ func (s *APIServer) handlerDeleteCountry() http.HandlerFunc {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		params := &api.DeleteAddressRequest{
+		var cityIds []int32
+		get_cities_params := &address_service_api.ListAddressesByParentIdAndTypeRequest{
+			ParentId: int32(id),
+			Type:     "city",
+		}
+		cities, err := s.GrpcClient.AddressClient.ListAddressesByParentAndType(ctx, get_cities_params)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+
+		for _, city := range cities.Result {
+			cityIds = append(cityIds, city.Id)
+		}
+		delete_storehouses_params := &storehouse_service_api.DeleteStorehousesByCityIdRequest{
+			CityIds: cityIds,
+		}
+		_, err = s.GrpcClient.StoreHouseClient.DeleteStorehousesByCityId(ctx, delete_storehouses_params)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+		delete_country_params := &address_service_api.DeleteAddressRequest{
 			Id:   int32(id),
 			Type: "country",
 		}
-		_, err = s.GrpcClient.AddressClient.DeleteAddress(ctx, params)
+		_, err = s.GrpcClient.AddressClient.DeleteAddress(ctx, delete_country_params)
 		if err != nil {
 			if e, ok := status.FromError(err); ok && e.Code() == codes.NotFound {
 				w.WriteHeader(http.StatusNotFound)
@@ -122,7 +145,7 @@ func (s *APIServer) handleGetCity() http.HandlerFunc {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		params := &api.GetAddressByIdRequest{
+		params := &address_service_api.GetAddressByIdRequest{
 			Id: int32(id),
 		}
 		city, err := s.GrpcClient.AddressClient.GetAddressById(ctx, params)
@@ -157,7 +180,7 @@ func (s *APIServer) handleListCities() http.HandlerFunc {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		params := &api.ListAddressesByParentIdAndTypeRequest{
+		params := &address_service_api.ListAddressesByParentIdAndTypeRequest{
 			Type:     "city",
 			ParentId: int32(country_id),
 		}
@@ -193,7 +216,7 @@ func (s *APIServer) handleCreateCity() http.HandlerFunc {
 			http.Error(w, "Missing 'country_id' param", http.StatusBadRequest)
 			return
 		}
-		params := &api.CreateAddressRequest{
+		params := &address_service_api.CreateAddressRequest{
 			Type:     "city",
 			Name:     body.Name,
 			ParentId: body.CountryId,
@@ -215,11 +238,22 @@ func (s *APIServer) handleDeleteCity() http.HandlerFunc {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		params := &api.DeleteAddressRequest{
+
+		delete_storehouses_params := &storehouse_service_api.DeleteStorehousesByCityIdRequest{
+			CityIds: []int32{int32(id)},
+		}
+		_, err = s.GrpcClient.StoreHouseClient.DeleteStorehousesByCityId(ctx, delete_storehouses_params)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+
+		delete_city_params := &address_service_api.DeleteAddressRequest{
 			Id:   int32(id),
 			Type: "city",
 		}
-		_, err = s.GrpcClient.AddressClient.DeleteAddress(ctx, params)
+
+		_, err = s.GrpcClient.AddressClient.DeleteAddress(ctx, delete_city_params)
 		if err != nil {
 			if e, ok := status.FromError(err); ok && e.Code() == codes.NotFound {
 				w.WriteHeader(http.StatusNotFound)

@@ -3,13 +3,12 @@ package apiserver
 import (
 	"context"
 	"encoding/json"
-	"net/http"
-	"strconv"
-	"strings"
-
 	"github.com/gorilla/mux"
 	auto_reference_catalog_service "github.com/maximprokopchuk/auto_reference_catalog_service/pkg/api"
 	storehouse_service_api "github.com/maximprokopchuk/storehouse_service/pkg/api"
+	"net/http"
+	"strconv"
+	"strings"
 )
 
 func (s *APIServer) handleGetStorehouseItems() http.HandlerFunc {
