@@ -89,7 +89,7 @@ func (s *APIServer) handleCreateCountry() http.HandlerFunc {
 	}
 }
 
-func (s *APIServer) handleDeleteCountry() http.HandlerFunc {
+func (s *APIServer) handlerDeleteCountry() http.HandlerFunc {
 	ctx := context.Background()
 	return func(w http.ResponseWriter, r *http.Request) {
 		id, err := strconv.Atoi(mux.Vars(r)["id"])
