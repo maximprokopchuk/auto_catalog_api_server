@@ -13,5 +13,15 @@ func (s *APIServer) configureRouter() {
 
 	s.router.Handle("/car_models/", s.handleListCarModels()).Methods("GET")
 	s.router.Handle("/car_models/", s.handleCreateCarModel()).Methods("POST")
-	s.router.Handle("/car_models/{id}", s.handleDeleteCarModel()).Methods("DELETE")
+	s.router.Handle("/car_models/{id}/", s.handleGetCarModel()).Methods("GET")
+	s.router.Handle("/car_models/{id}/", s.handleDeleteCarModel()).Methods("DELETE")
+
+	s.router.Handle("/components/", s.handleGetComponents()).Methods("GET")
+	s.router.Handle("/components/", s.handleCreateComponent()).Methods("POST")
+	s.router.Handle("/components/{id}/", s.handleUpdateComponent()).Methods("PATCH")
+
+	s.router.Handle("/items/", s.handleGetStorehouseItems()).Methods("GET")
+	s.router.Handle("/items/", s.handleCreateStorehouseItem()).Methods("POST")
+	s.router.Handle("/items/{id}/", s.handleDeleteStorehouseItem()).Methods("DELETE")
+	s.router.Handle("/items/{id}/", s.handleUpdateStorehouseItem()).Methods("PATCH")
 }

@@ -147,7 +147,12 @@ func (s *APIServer) handleGetCity() http.HandlerFunc {
 func (s *APIServer) handleListCities() http.HandlerFunc {
 	ctx := context.Background()
 	return func(w http.ResponseWriter, r *http.Request) {
-		country_id, err := strconv.Atoi(r.URL.Query().Get("country_id"))
+		country_id_str := r.URL.Query().Get("country_id")
+		if country_id_str == "" {
+			http.Error(w, "Missing 'country_id' param", http.StatusBadRequest)
+			return
+		}
+		country_id, err := strconv.Atoi(country_id_str)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
