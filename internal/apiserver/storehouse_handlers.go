@@ -3,12 +3,13 @@ package apiserver
 import (
 	"context"
 	"encoding/json"
-	"github.com/gorilla/mux"
-	auto_reference_catalog_service "github.com/maximprokopchuk/auto_reference_catalog_service/pkg/api"
-	storehouse_service_api "github.com/maximprokopchuk/storehouse_service/pkg/api"
 	"net/http"
 	"strconv"
 	"strings"
+
+	"github.com/gorilla/mux"
+	auto_reference_catalog_service "github.com/maximprokopchuk/auto_reference_catalog_service/pkg/api"
+	storehouse_service_api "github.com/maximprokopchuk/storehouse_service/pkg/api"
 )
 
 func (s *APIServer) handleGetStorehouseItems() http.HandlerFunc {
@@ -153,7 +154,7 @@ func (s *APIServer) getAllChildComponentsIds(ctx context.Context, componentId in
 	}
 	var component_ids = make([]int32, 0)
 	for _, component := range components.Result {
-		component_ids = append(component_ids, componentId)
+		component_ids = append(component_ids, component.Id)
 		childs, err := s.getAllChildComponentsIds(ctx, component.Id)
 		if err != nil {
 			return nil, err
