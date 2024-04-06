@@ -1,8 +1,0 @@
-[apiserver]
-bind_url = ":8080"
-
-[grpc_client]
-address_service_url = ":8081"
-storehouse_service_url = ":8082"
-auto_reference_catalog_service_url = ":8083"
-
