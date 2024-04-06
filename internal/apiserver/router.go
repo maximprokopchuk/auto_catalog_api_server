@@ -4,7 +4,7 @@ func (s *APIServer) configureRouter() {
 	s.router.Handle("/countries/", s.handleListCountries()).Methods("GET")
 	s.router.Handle("/countries/", s.handleCreateCountry()).Methods("POST")
 	s.router.Handle("/countries/{id}/", s.handleGetCountry()).Methods("GET")
-	s.router.Handle("/countries/{id}/", s.handlerDeleteCountry()).Methods("DELETE")
+	s.router.Handle("/countries/{id}/", s.handleDeleteCountry()).Methods("DELETE")
 
 	s.router.Handle("/cities/", s.handleListCities()).Methods("GET")
 	s.router.Handle("/cities/", s.handleCreateCity()).Methods("POST")

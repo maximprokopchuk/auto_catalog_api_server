@@ -89,7 +89,7 @@ func (s *APIServer) handleCreateCountry() http.HandlerFunc {
 	}
 }
 
-func (s *APIServer) handlerDeleteCountry() http.HandlerFunc {
+func (s *APIServer) handleDeleteCountry() http.HandlerFunc {
 	ctx := context.Background()
 	return func(w http.ResponseWriter, r *http.Request) {
 		id, err := strconv.Atoi(mux.Vars(r)["id"])
@@ -98,6 +98,8 @@ func (s *APIServer) handlerDeleteCountry() http.HandlerFunc {
 			return
 		}
 		var cityIds []int32
+
+		// We also need to delete stroehouses related to cities of the country
 		get_cities_params := &address_service_api.ListAddressesByParentIdAndTypeRequest{
 			ParentId: int32(id),
 			Type:     "city",
@@ -239,6 +241,7 @@ func (s *APIServer) handleDeleteCity() http.HandlerFunc {
 			return
 		}
 
+		// We also need to delete stroehouses related to the city
 		delete_storehouses_params := &storehouse_service_api.DeleteStorehousesByCityIdRequest{
 			CityIds: []int32{int32(id)},
 		}
