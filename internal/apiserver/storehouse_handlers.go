@@ -180,6 +180,7 @@ func (s *APIServer) handleDeleteStorehouseItem() http.HandlerFunc {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+		// we need to remove all storehouse items related to child components of current item's compoennt
 		component_ids, err := s.getAllChildComponentsIds(ctx, item.Result.ComponentId)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
