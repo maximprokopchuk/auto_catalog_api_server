@@ -1,5 +1,6 @@
 [apiserver]
 bind_url = ":8080"
+allowed_origin = "http://localhost:5173"
 
 [grpc_client]
 address_service_url = ":8081"

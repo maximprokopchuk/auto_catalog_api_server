@@ -9,10 +9,10 @@ import (
 )
 
 type GRPCClient struct {
-	config            *Config
-	AddressClient     address_api.AddressServiceClient
-	StoreHouseClient  storehouse_api.StorehouseServiceClient
-	AutoCatalogClient auto_catalog_api.AutoCatalogServiceClient
+	config                     *Config
+	AddressClient              address_api.AddressServiceClient
+	StoreHouseClient           storehouse_api.StorehouseServiceClient
+	AutoReferenceCatalogClient auto_catalog_api.AutoCatalogServiceClient
 }
 
 func New(config *Config) *GRPCClient {
@@ -30,13 +30,13 @@ func (client *GRPCClient) Init() error {
 	if err != nil {
 		return nil
 	}
-	auto_catalog_client, err := client.initAutoCatalogServiceClient()
+	auto_catalog_client, err := client.initAutoReferenceCatalogServiceClient()
 	if err != nil {
 		return nil
 	}
 	client.AddressClient = address_client
 	client.StoreHouseClient = storehouse_client
-	client.AutoCatalogClient = auto_catalog_client
+	client.AutoReferenceCatalogClient = auto_catalog_client
 	return nil
 }
 
@@ -60,7 +60,7 @@ func (client *GRPCClient) initStorehouseClient() (storehouse_api.StorehouseServi
 	return storehouse_client, nil
 }
 
-func (client *GRPCClient) initAutoCatalogServiceClient() (auto_catalog_api.AutoCatalogServiceClient, error) {
+func (client *GRPCClient) initAutoReferenceCatalogServiceClient() (auto_catalog_api.AutoCatalogServiceClient, error) {
 	conn, err := grpc.Dial(client.config.AutoReferenceCatalogServiceUrl, grpc.WithTransportCredentials(insecure.NewCredentials()))
 
 	if err != nil {

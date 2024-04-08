@@ -13,8 +13,8 @@ github.com/maximprokopchuk/address_service v1.4.0 h1:baXbau81oVukesZqrXnv/iJBCx2
 github.com/maximprokopchuk/address_service v1.4.0/go.mod h1:1e+HDaaytK5KTK18CNT6OOTFxHhabKAGgj5OCLMw2vE=
 github.com/maximprokopchuk/auto_reference_catalog_service v1.4.0 h1:m8MhFewTYMo6+w+0+zoYjIWOOoLt8/og4jvbu7JAvXk=
 github.com/maximprokopchuk/auto_reference_catalog_service v1.4.0/go.mod h1:AppBjX1mHbenAFA9arswJz3mriCEt9JLPpS1amzzo1s=
-github.com/maximprokopchuk/storehouse_service v1.3.0 h1:pRYyS0HdC26TDw8KJBLoBo5LE0QOoV1kM6z4HzJbQv8=
-github.com/maximprokopchuk/storehouse_service v1.3.0/go.mod h1:XVNK3u5O81Wkt17ZsRpRPXGrrtDOJ4W9tUp4XfafDlQ=
+github.com/maximprokopchuk/storehouse_service v1.4.0 h1:d7ROi5hqHtFVb2EktiouOOQJe31+FNGc0PyhOBbsfP8=
+github.com/maximprokopchuk/storehouse_service v1.4.0/go.mod h1:XVNK3u5O81Wkt17ZsRpRPXGrrtDOJ4W9tUp4XfafDlQ=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/rs/cors v1.10.1 h1:L0uuZVXIKlI1SShY2nhFfo44TYvDPQ1w4oFkUJNfhyo=

@@ -23,7 +23,7 @@ func (s *APIServer) handleGetCarModel() http.HandlerFunc {
 		params := &api.GetCarModelByIdRequest{
 			Id: int32(id),
 		}
-		car_model, err := s.GrpcClient.AutoCatalogClient.GetCarModelById(ctx, params)
+		car_model, err := s.GrpcClient.AutoReferenceCatalogClient.GetCarModelById(ctx, params)
 		if err != nil {
 			if e, ok := status.FromError(err); ok && e.Code() == codes.NotFound {
 				w.WriteHeader(http.StatusNotFound)
@@ -40,7 +40,7 @@ func (s *APIServer) handleGetCarModel() http.HandlerFunc {
 func (s *APIServer) handleListCarModels() http.HandlerFunc {
 	ctx := context.Background()
 	return func(w http.ResponseWriter, r *http.Request) {
-		car_models, err := s.GrpcClient.AutoCatalogClient.ListCarModels(ctx, nil)
+		car_models, err := s.GrpcClient.AutoReferenceCatalogClient.ListCarModels(ctx, nil)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			return
@@ -70,7 +70,7 @@ func (s *APIServer) handleCreateCarModel() http.HandlerFunc {
 		params := &api.CreateCarModelRequest{
 			Name: body.Name,
 		}
-		response, err := s.GrpcClient.AutoCatalogClient.CreateCarModel(ctx, params)
+		response, err := s.GrpcClient.AutoReferenceCatalogClient.CreateCarModel(ctx, params)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			return
@@ -90,7 +90,7 @@ func (s *APIServer) handleDeleteCarModel() http.HandlerFunc {
 		params := &api.DeleteCarModelRequest{
 			Id: int32(id),
 		}
-		_, err = s.GrpcClient.AutoCatalogClient.DeleteCarModel(ctx, params)
+		_, err = s.GrpcClient.AutoReferenceCatalogClient.DeleteCarModel(ctx, params)
 		if err != nil {
 			if e, ok := status.FromError(err); ok && e.Code() == codes.NotFound {
 				w.WriteHeader(http.StatusNotFound)
@@ -123,7 +123,7 @@ func (s *APIServer) handleGetComponents() http.HandlerFunc {
 			components_params := &api.GetTopLevelComponentsByCarModelRequest{
 				CarModelId: int32(car_model_id),
 			}
-			components, err = s.GrpcClient.AutoCatalogClient.GetTopLevelComponentsByCarModel(ctx, components_params)
+			components, err = s.GrpcClient.AutoReferenceCatalogClient.GetTopLevelComponentsByCarModel(ctx, components_params)
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
@@ -137,7 +137,7 @@ func (s *APIServer) handleGetComponents() http.HandlerFunc {
 			components_params := &api.GetChildComponentsByComponentRequest{
 				ParentId: int32(parent_component_id),
 			}
-			components, err = s.GrpcClient.AutoCatalogClient.GetChildComponentsByComponent(ctx, components_params)
+			components, err = s.GrpcClient.AutoReferenceCatalogClient.GetChildComponentsByComponent(ctx, components_params)
 			if err != nil {
 				http.Error(w, err.Error(), http.StatusInternalServerError)
 				return
@@ -174,12 +174,12 @@ func (s *APIServer) handleCreateComponent() http.HandlerFunc {
 		params := &api.CreateComponentRequest{
 			Name: body.Name,
 		}
-		if body.CarModelId != 0 {
+		if body.ParentComponentId == 0 {
 			params.CarModelId = body.CarModelId
 		} else {
 			params.ParentId = body.ParentComponentId
 		}
-		response, err := s.GrpcClient.AutoCatalogClient.CreateComponent(ctx, params)
+		response, err := s.GrpcClient.AutoReferenceCatalogClient.CreateComponent(ctx, params)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			return
@@ -214,7 +214,7 @@ func (s *APIServer) handleUpdateComponent() http.HandlerFunc {
 			Id:   int32(id),
 			Name: body.Name,
 		}
-		response, err := s.GrpcClient.AutoCatalogClient.UpdateComponent(ctx, params)
+		response, err := s.GrpcClient.AutoReferenceCatalogClient.UpdateComponent(ctx, params)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			return

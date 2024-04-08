@@ -148,7 +148,7 @@ func (s *APIServer) getAllChildComponentsIds(ctx context.Context, componentId in
 	params := &auto_reference_catalog_service.GetChildComponentsByComponentRequest{
 		ParentId: componentId,
 	}
-	components, err := s.GrpcClient.AutoCatalogClient.GetChildComponentsByComponent(ctx, params)
+	components, err := s.GrpcClient.AutoReferenceCatalogClient.GetChildComponentsByComponent(ctx, params)
 	if err != nil {
 		return nil, err
 	}

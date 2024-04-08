@@ -19,5 +19,5 @@ func TestServer(t *testing.T) {
 	assert.NotNil(t, client)
 	assert.NotNil(t, client.AddressClient)
 	assert.NotNil(t, client.StoreHouseClient)
-	assert.NotNil(t, client.AutoCatalogClient)
+	assert.NotNil(t, client.AutoReferenceCatalogClient)
 }

@@ -18,7 +18,7 @@ type APIServer struct {
 func New(config *Config, grpc_client *grpcclient.GRPCClient) *APIServer {
 	router := mux.NewRouter()
 	c := cors.New(cors.Options{
-		AllowedOrigins:   []string{"http://localhost:5173"},
+		AllowedOrigins:   []string{config.AllowedOrigin},
 		AllowedMethods:   []string{"GET", "HEAD", "POST", "PUT", "PATCH", "OPTIONS", "DELETE"},
 		AllowCredentials: true,
 	})
