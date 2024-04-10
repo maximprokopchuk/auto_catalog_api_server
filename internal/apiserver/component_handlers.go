@@ -56,8 +56,8 @@ type CreateCarModelBody struct {
 
 func (s *APIServer) handleCreateCarModel() http.HandlerFunc {
 	ctx := context.Background()
-	var body CreateCarModelBody
 	return func(w http.ResponseWriter, r *http.Request) {
+		var body CreateCarModelBody
 		err := json.NewDecoder(r.Body).Decode(&body)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
@@ -156,8 +156,8 @@ type CreateComponentBody struct {
 
 func (s *APIServer) handleCreateComponent() http.HandlerFunc {
 	ctx := context.Background()
-	var body CreateComponentBody
 	return func(w http.ResponseWriter, r *http.Request) {
+		var body CreateComponentBody
 		err := json.NewDecoder(r.Body).Decode(&body)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
@@ -194,8 +194,8 @@ type UpdateComponentBody struct {
 
 func (s *APIServer) handleUpdateComponent() http.HandlerFunc {
 	ctx := context.Background()
-	var body CreateComponentBody
 	return func(w http.ResponseWriter, r *http.Request) {
+		var body CreateComponentBody
 		id, err := strconv.Atoi(mux.Vars(r)["id"])
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)

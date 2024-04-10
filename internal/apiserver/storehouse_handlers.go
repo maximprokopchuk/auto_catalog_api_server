@@ -83,8 +83,8 @@ type CreateStorehouseItem struct {
 
 func (s *APIServer) handleCreateStorehouseItem() http.HandlerFunc {
 	ctx := context.Background()
-	var body CreateStorehouseItem
 	return func(w http.ResponseWriter, r *http.Request) {
+		var body CreateStorehouseItem
 		err := json.NewDecoder(r.Body).Decode(&body)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
@@ -207,8 +207,8 @@ type UpdateStorehouseItemBody struct {
 
 func (s *APIServer) handleUpdateStorehouseItem() http.HandlerFunc {
 	ctx := context.Background()
-	var body CreateStorehouseItem
 	return func(w http.ResponseWriter, r *http.Request) {
+		var body CreateStorehouseItem
 		id, err := strconv.Atoi(mux.Vars(r)["id"])
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)

@@ -65,8 +65,8 @@ type CreateCountryRequestBody struct {
 
 func (s *APIServer) handleCreateCountry() http.HandlerFunc {
 	ctx := context.Background()
-	var body CreateCountryRequestBody
 	return func(w http.ResponseWriter, r *http.Request) {
+		var body CreateCountryRequestBody
 		err := json.NewDecoder(r.Body).Decode(&body)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
@@ -203,8 +203,8 @@ type CreateCityRequestBody struct {
 
 func (s *APIServer) handleCreateCity() http.HandlerFunc {
 	ctx := context.Background()
-	var body CreateCityRequestBody
 	return func(w http.ResponseWriter, r *http.Request) {
+		var body CreateCityRequestBody
 		err := json.NewDecoder(r.Body).Decode(&body)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
